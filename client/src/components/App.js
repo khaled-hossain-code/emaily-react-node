@@ -11,7 +11,10 @@ function App () {
     <div>
       <BrowserRouter>
         <div>
-          <Route path="/" component={Landing} />
+          <Header />
+          <Route exact path="/" component={Landing} />
+          <Route exact path="/surveys" component={Dashboard} />
+          <Route path="/survey/new" component={SurveyNew} />
         </div>
       </BrowserRouter>
     </div>

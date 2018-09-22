@@ -9,30 +9,29 @@ passport.use(new GoogleStrategy({
   clientSecret: keys.googleClientSecret,
   callbackURL: "/auth/google/callback",
   proxy: true
-}, (accessToken, refreshToken, profile, done) => {
-  User.findOne({googleClientId: profile.id})
-      .then((user)=> {
-        if(user){
-          done(null, user);
-        }else {
-          new User({
-            googleClientId: profile.id
-          })
-          .save()
-          .then( newUser => {
-            done(null, newUser);
-          })
-        }
-      })
+}, async (accessToken, refreshToken, profile, done) => {
+  const user = await User.findOne({
+    googleClientId: profile.id
+  });
+
+  if (user) {
+    return done(null, user);
+  }
+
+  const newUser = new User({
+    googleClientId: profile.id
+  }).save()
+
+  done(null, newUser);
 }));
 
 passport.serializeUser((user, done) => {
   done(null, user.id);
 });
 
-passport.deserializeUser((id, done)=> {
+passport.deserializeUser((id, done) => {
   User.findById(id)
-    .then( user => {
+    .then(user => {
       done(null, user);
     });
 });

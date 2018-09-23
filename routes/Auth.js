@@ -2,9 +2,9 @@ const passport = require('passport');
 
 module.exports = function (app) {
   app.get('/auth/google', passport.authenticate('google', { scope: ['profile']}));
-  app.get('/auth/logout', (req, res) => {
+  app.get('/api/logout', (req, res) => {
     req.logout();
-    res.send(req.user);
+    res.redirect('/');
   })
   app.get(
     '/auth/google/callback',
